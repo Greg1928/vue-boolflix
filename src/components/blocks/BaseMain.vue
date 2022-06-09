@@ -1,16 +1,19 @@
 <template>
   <main>
-    <input type="text" @keyup.enter="filterFilms()" v-model="InputText">
+    <input type="text" placeholder="Cerca film o serie Tv" @keyup="filterFilms()" v-model="InputText">
     <button @click="filterFilms()">Search</button>
-    <ol>
-      <li v-for="(film, i) in films" :key="film.id">
-        <h1>Titolo: {{film.title}}</h1>
-        <h2>Titolo Originale: {{film.original_title}}</h2>
-        <h3>Lingua: <img :src="dynamicFlags(i)"/></h3>
-        <h4>Voto: {{film.vote_average}}</h4>
-        <hr>
-      </li>
-    </ol>
+    <SectionTrending :class="{show : InputText === ''}"/>
+    <div :class="{none : InputText === ''}">
+      <h1>I tuoi risultati</h1>
+      <ol>
+        <li v-for="(film, i) in films" :key="film.id">
+          <h1>Titolo: {{film.title}}</h1>
+          <h2>Titolo Originale: {{film.original_title}}</h2>
+          <h3>Lingua: <img :src="dynamicFlags(i)"/></h3>
+          <h4>Voto: {{film.vote_average}}</h4>
+        </li>
+      </ol>
+    </div>
   </main>
 </template>
 
@@ -21,13 +24,16 @@ import imageGb from '../../assets/img/Eng.png'
 import imageEs from '../../assets/img/Flag_of_Spain.svg.png'
 import imageFr from '../../assets/img/Flag_of_France.png'
 import imageRest from '../../assets/img/mundo-comunicacion-red_42634-20.webp.png'
+import SectionTrending from '../sections/SectionTrending.vue'
 
 export default {
   name: 'BaseMain',
+   components: { SectionTrending },
    data(){
         return{
             films: [],
             InputText: '',
+
         }
     },
     methods:{
@@ -56,15 +62,38 @@ export default {
     }else{
       return imageRest
     }
-    }
+    },
 }
 }
 </script>
 
 
 <style scoped lang="scss">
+h1{
+  text-align: center;
+}
+ol{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  
+  li{
+    border: solid 1px black;
+    margin: 10px;
+    background-color: lightgreen;
+    text-align: center;
+    width: 20%;
+  }
+}
 img{
   max-width: 30px;
   vertical-align: middle;
+}
+.show{
+  display: block;
+}
+.none{
+  display: none;
 }
 </style>
