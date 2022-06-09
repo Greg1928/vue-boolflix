@@ -2,14 +2,15 @@
   <main>
     <input type="text" v-model="InputText">
     <button @click="filterFilms()">Search</button>
-    <ul>
+    <ol>
       <li v-for="film in films" :key="film.id">
         <h1>Titolo: {{film.title}}</h1>
         <h2>Titolo Originale: {{film.original_title}}</h2>
         <h3>Lingua: {{film.original_language}}</h3>
         <h4>Popolarità: {{film.popularity}}</h4>
+        <hr>
       </li>
-    </ul>
+    </ol>
   </main>
 </template>
 
