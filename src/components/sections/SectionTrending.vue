@@ -3,17 +3,13 @@
     <h1>Serie TV Trends</h1>
     <ol>
       <li v-for="trend in trendingTv" :key="trend.i">
-        <h2>Titolo: {{trend.name}}</h2>
-        <h3>Categoria: {{trend.media_type}}</h3>
-        <h4>Popolarità: {{trend.popularity}}</h4>
+        <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
       </li>
     </ol>
     <h1>Film Trends</h1>
     <ol>
       <li v-for="trend in trendingMv" :key="trend.i">
-        <h2>Titolo: {{trend.title}}</h2>
-        <h3>Categoria: {{trend.media_type}}</h3>
-        <h4>Popolarità: {{trend.popularity}}</h4>
+        <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
       </li>
     </ol>
   </section>
@@ -43,6 +39,7 @@ export default {
             this.trendingMv.push(response.data.results[i]);
           }
           }
+          console.log(this.trendingMv);
         }).catch((err) => {
             console.log(err);
         });
@@ -61,16 +58,10 @@ section{
 
   ol{
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     list-style: none;
-  
-  li{
-    width: 20%;
-    border: solid 1px black;
-    margin: 10px;
-    background-color: lightsalmon;
-  }
+    overflow-x: auto;
+
   }
 }
 </style>
