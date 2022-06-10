@@ -13,4 +13,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+img{
+    border: 1px solid white;
+}
 </style>

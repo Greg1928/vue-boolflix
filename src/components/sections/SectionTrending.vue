@@ -1,6 +1,7 @@
 <template>
   <section>
-    <h1>Serie TV Trends</h1>
+    <div class="container">
+      <h1>Serie TV Trends</h1>
     <ol>
       <li v-for="trend in trendingTv" :key="trend.i">
         <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
@@ -12,6 +13,7 @@
         <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
       </li>
     </ol>
+    </div>
   </section>
 </template>
 
@@ -62,6 +64,12 @@ section{
     list-style: none;
     overflow-x: auto;
 
+  }
+  li{
+    margin: 10px;
+  }
+  img{
+    border: 1px solid white;  
   }
 }
 </style>

@@ -48,6 +48,9 @@ export default {
 
 <style scoped lang="scss">
 main{
+  background-color: var(--primary-color);
+  height: 100vh;
+  overflow: auto;
 
   h1{
     text-align: center;

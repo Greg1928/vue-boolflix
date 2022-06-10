@@ -2,7 +2,7 @@
   <section>
         <input type="text" placeholder="Cerca film o serie Tv" v-model="dataShared.InputText">
         <button @click="filterTv(), filterFilms()">Search</button>
-        <div :class="{none : dataShared.InputText === ''}">
+        <div :class="{none : dataShared.InputText === ''}" >
             <h1>I tuoi risultati nella categoria Film</h1>
 
             <div class="list">
@@ -102,18 +102,26 @@ export default {
 <styles scoped lang="scss">
 section{
   // display: none;
+  h1{
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+  }
 
   .list{
   overflow-x: auto;
 
     .thumb{
         display: flex;
+        gap: 20px;
+        margin: 20px;
+}
     }
     
 }
 .none{
   display: none;
 }
-}
+
 
 </styles>
