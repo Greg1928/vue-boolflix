@@ -1,19 +1,18 @@
 <template>
   <section>
-    <div class="container">
-      <h1>Serie TV Trends</h1>
-    <ol>
-      <li v-for="trend in trendingTv" :key="trend.i">
-        <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
-      </li>
-    </ol>
-    <h1>Film Trends</h1>
-    <ol>
-      <li v-for="trend in trendingMv" :key="trend.i">
-        <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
-      </li>
-    </ol>
-    </div>
+    <h1>Serie TV Trends</h1>
+  <ol>
+    <li v-for="trend in trendingTv" :key="trend.i">
+      <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
+    </li>
+  </ol>
+  <h1>Film Trends</h1>
+  <ol>
+    <li v-for="trend in trendingMv" :key="trend.i">
+      <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
+    </li>
+  </ol>
+    
   </section>
 </template>
 
@@ -56,6 +55,7 @@ section{
   h1{
     text-align: center;
     font-size: 40px;
+    text-transform: uppercase;
   }
 
   ol{
@@ -63,10 +63,10 @@ section{
     justify-content: center;
     list-style: none;
     overflow-x: auto;
-
+    background-color: black;
   }
   li{
-    margin: 10px;
+    margin: 2rem;
   }
   img{
     border: 1px solid white;  
