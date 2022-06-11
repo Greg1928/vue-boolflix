@@ -1,15 +1,32 @@
 <template>
   <section>
-    <h1>Serie TV Trends</h1>
+    <h1>Serie TV in tendenza</h1>
   <ol>
-    <li v-for="trend in trendingTv" :key="trend.i">
+    <li v-for="(trend, index) in trendingTv" :key="trend.i" @mouseover="mouseover(index)" @mouseleave="mouseleave(index)">
       <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
+       <div class="over" :class="{block : trend.media_type === 'tvs'}"> 
+        <div class="content">
+          <p><span>Titolo: </span> {{trend.name}}</p>
+          <p><span>Titolo Originale: </span>{{trend.original_name}}</p>
+          <p><span>Voto: </span>{{trend.vote_average}}</p>
+          <p><span>Overview: </span>{{trend.overview}}</p>
+        </div>
+      </div>
     </li>
   </ol>
-  <h1>Film Trends</h1>
+  <h1>Film in tendenza</h1>
   <ol>
-    <li v-for="trend in trendingMv" :key="trend.i">
+    <li v-for="(trend, index) in trendingMv" :key="trend.i"  @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
       <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
+      <div class="over" :class="{block : trend.video === 'movies'}"> 
+        <div class="content">
+          <p><span>Titolo: </span>{{trend.title}}</p>
+          <p><span>Titolo Originale: </span>{{trend.original_title}}</p>
+          <p><span>Voto: </span>{{trend.vote_average}}</p>
+          <p><span>Overview: </span>{{trend.overview}}</p>
+        </div>
+
+      </div>
     </li>
   </ol>
     
@@ -25,6 +42,7 @@ export default {
         return{
             trendingTv: [],
             trendingMv: [],
+            check: false,
         }
       },
       created(){
@@ -40,11 +58,26 @@ export default {
             this.trendingMv.push(response.data.results[i]);
           }
           }
-          console.log(this.trendingMv);
         }).catch((err) => {
             console.log(err);
         });
     },
+    methods: {
+    mouseover: function(index){
+      this.trendingTv[index].media_type = 'tvs';
+    }, 
+    mouseleave: function(index){
+      this.trendingTv[index].media_type = 'tv';
+
+    },
+    mouseoverMv: function(index){
+      this.trendingMv[index].video = 'movies';
+    }, 
+    mouseleaveMv: function(index){
+      this.trendingMv[index].video = 'movie';
+
+    }, 
+}
 }
 </script>
 
@@ -60,16 +93,41 @@ section{
 
   ol{
     display: flex;
-    justify-content: center;
     list-style: none;
     overflow-x: auto;
     background-color: black;
   }
   li{
     margin: 2rem;
+    cursor: pointer;
+    position: relative;
+  }
+  .over{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    color: white;
+    background-color: rgba($color: #000000, $alpha: 0.8);
+    max-width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s;
+    text-align: left;
+
+    .content{
+      padding: 40px 0 0 10px;
+
+      span{
+        font-weight: bold;
+      }
+    }
   }
   img{
     border: 1px solid white;  
+  }
+  .block{
+    opacity: 1;
   }
 }
 </style>

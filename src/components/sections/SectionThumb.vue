@@ -1,23 +1,39 @@
 <template>
   <section>
-        <input type="text" placeholder="  Cerca film o serie Tv" @keyup.enter="filterTv(), filterFilms()" v-model="dataShared.InputText">
-        <button @click="filterTv(), filterFilms()"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <div :class="{none : dataShared.InputText === ''}" >
-            <h1>I tuoi risultati nella categoria Film</h1>
+    <input type="text" placeholder="  Cerca film o serie Tv" @keyup.enter="filterTv(), filterFilms()" v-model="dataShared.InputText">
+    <button @click="filterTv(), filterFilms()"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <div :class="{none : dataShared.InputText === ''}" >
+      <h1>I tuoi risultati nella categoria Film</h1>
 
-            <div class="list">
-                <div class="thumb">
-                    <FilmCardThumb v-for="(film) in films" :key="film.id" :film="film"/>
-                </div>
+      <div class="list">
+        <div class="thumb" v-for="(film, index) in films" :key="film.id" @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
+          <FilmCardThumb :film="film"/>
+          <div class="over" :class="{show : film.video === 'true'}"> 
+            <div class="content">
+              <p><span>Titolo: </span> {{film.title}}</p>
+              <p><span>Titolo Originale: </span>{{film.original_title}}</p>
+              <p><span>Voto: </span>{{film.vote_average}}</p>
+              <p><span>Overview: </span>{{film.overview}}</p>
             </div>
-            <h1>I tuoi risultati nella categoria Serie Tv</h1>
-            <div class="list">
-                <div class="thumb">
-                    <TvCardThumb v-for="(serie) in Tv" :key="serie.id" :Tv="serie"/>
-                </div>
-            </div>
+          </div>
         </div>
-    </section>
+      </div>
+        <h1>I tuoi risultati nella categoria Serie Tv</h1>
+      <div class="list">
+        <div class="thumb" v-for="(serie,index) in Tv" :key="serie.id" @mouseover="mouseoverTv(index)" @mouseleave="mouseleaveTv(index)">
+          <TvCardThumb :Tv="serie"/>
+          <div class="over" :class="{show : serie.vote_count === 'true'}"> 
+              <div class="content">
+                <p><span>Titolo: </span> {{serie.name}}</p>
+                <p><span>Titolo Originale: </span>{{serie.original_name}}</p>
+                <p><span>Voto: </span>{{serie.vote_average}}</p>
+                <p><span>Overview: </span>{{serie.overview}}</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -51,6 +67,7 @@ export default {
             }
         }).then((response) =>{
             this.films = response.data.results
+            console.log(this.films);
         }).catch((err) => {
             console.log(err);
         })
@@ -95,6 +112,20 @@ export default {
       return imageRest
     }
     },
+    mouseoverTv: function(index){
+      this.Tv[index].vote_count = 'true';
+    }, 
+    mouseleaveTv: function(index){
+      this.Tv[index].vote_count = 'false';
+
+    },
+    mouseoverMv: function(index){
+      this.films[index].video = 'true';
+    }, 
+    mouseleaveMv: function(index){
+      this.films[index].video = 'false';
+
+    }, 
 }
 }
 </script>
@@ -105,6 +136,7 @@ section{
   h1{
     color: white;
     text-align: center;
+    margin-top: 20px;
   }
   input{
     width: 300px;
@@ -123,17 +155,47 @@ section{
 
   .list{
   overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  background-color: black;
 
     .thumb{
-        display: flex;
-        gap: 2rem;
-        margin: 20px;
-}
+        cursor: pointer;
+        position: relative;
+        margin: 2rem;
+
+        .show{
+          opacity: 1;
+          }
+      }
+
+        .over{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1;
+        color: white;
+        background-color: rgba($color: #000000, $alpha: 0.8);
+        max-width: 100%;
+        opacity: 0;
+        transition: opacity 0.5s;
+        text-align: left;
+
+        .content{
+          margin: 40px 0 0 10px;
+
+          span{
+            font-weight: bold;
+          }
+        }
+    }
+    }
+    .none{
+      display: none;
     }
     
-}
-.none{
-  display: none;
+  
 }
 
 
