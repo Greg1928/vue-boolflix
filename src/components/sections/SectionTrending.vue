@@ -99,7 +99,7 @@ section{
     list-style: none;
     overflow-x: auto;
     background-color: black;
-    margin: 0;
+    padding-left: 20px;
   }
   li{
     margin: 2rem .5rem;
@@ -123,7 +123,7 @@ section{
 
 
     .content{
-      padding: 40px 0 0 10px;
+      padding: 40px 20px;
 
       span{
         font-weight: bold;

@@ -3,7 +3,7 @@
     <div :class="{none : dataShared.InputText === ''}">
 
       <h1>I tuoi risultati nella categoria Film</h1>
-      <p v-if="dataShared.films.length === 0">Nessun film trovato :(</p>
+      <h5 v-if="dataShared.films.length === 0">Nessun film trovato :(</h5>
       <div class="list">
         <div class="thumb" v-for="(film, index) in dataShared.films" :key="film.id" @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
           <FilmCardThumb :film="film"/>
@@ -19,7 +19,7 @@
       </div>
 
       <h1>I tuoi risultati nella categoria Serie Tv</h1>
-      <p v-if="dataShared.Tv.length === 0">Nessuna serie tv trovata :(</p>
+      <h5 v-if="dataShared.Tv.length === 0">Nessuna serie tv trovata :(</h5>
       <div class="list">
         <div class="thumb" v-for="(serie,index) in dataShared.Tv" :key="serie.id" @mouseover="mouseoverTv(index)" @mouseleave="mouseleaveTv(index)">
           <TvCardThumb :Tv="serie"/>
@@ -116,8 +116,9 @@ export default {
     font-size: 30px;
     text-transform: uppercase;
   }
-  p{
+  h5{
     color: white;
+    margin-left: 20px;
   }
 
   .list{
@@ -125,6 +126,7 @@ export default {
   overflow-y: hidden;
   display: flex;
   background-color: black;
+  padding-left: 20px;
 
     .thumb{
         cursor: pointer;
@@ -152,7 +154,7 @@ export default {
         overflow-y: auto;
 
         .content{
-          margin: 40px 0 0 10px;
+          margin: 40px 20px;
 
           span{
             font-weight: bold;
