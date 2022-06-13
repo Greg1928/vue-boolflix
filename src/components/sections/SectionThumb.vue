@@ -6,13 +6,13 @@
       <h1>I tuoi risultati nella categoria Film</h1>
 
       <div class="list">
-        <div class="thumb" v-for="(film, index) in films" :key="film.id" @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
+        <div class="thumb" v-for="(film, index) in films" :key="film.id" @mouseover="mouseoverMv(index), voteMv(index)" @mouseleave="mouseleaveMv(index)">
           <FilmCardThumb :film="film"/>
           <div class="over" :class="{show : film.video === 'true'}"> 
             <div class="content">
               <p><span>Titolo: </span> {{film.title}}</p>
               <p><span>Titolo Originale: </span>{{film.original_title}}</p>
-              <p><span>Voto: </span>{{film.vote_average}}</p>
+              <p>Voto: <span v-for="n in votes" :key="n"><i class="fa-solid fa-star"></i></span></p>
               <p><span>Overview: </span>{{film.overview}}</p>
             </div>
           </div>
@@ -20,13 +20,13 @@
       </div>
         <h1>I tuoi risultati nella categoria Serie Tv</h1>
       <div class="list">
-        <div class="thumb" v-for="(serie,index) in Tv" :key="serie.id" @mouseover="mouseoverTv(index)" @mouseleave="mouseleaveTv(index)">
+        <div class="thumb" v-for="(serie,index) in Tv" :key="serie.id" @mouseover="mouseoverTv(index), voteTv(index)" @mouseleave="mouseleaveTv(index)">
           <TvCardThumb :Tv="serie"/>
           <div class="over" :class="{show : serie.vote_count === 'true'}"> 
               <div class="content">
                 <p><span>Titolo: </span> {{serie.name}}</p>
                 <p><span>Titolo Originale: </span>{{serie.original_name}}</p>
-                <p><span>Voto: </span>{{serie.vote_average}}</p>
+                <p>Voto: <span v-for="n in votes" :key="n"><i class="fa-solid fa-star"></i></span></p>
                 <p><span>Overview: </span>{{serie.overview}}</p>
               </div>
           </div>
@@ -54,8 +54,10 @@ export default {
         return{
             films: [],
             Tv: [],
-            dataShared
+            dataShared,
+            votes: 0
         }
+
     },
     methods:{
       filterFilms(){
@@ -126,7 +128,17 @@ export default {
       this.films[index].video = 'false';
 
     }, 
-}
+     voteTv(index){
+          let n = (Math.ceil(this.Tv[index].vote_average / 2));
+            this.votes = n;
+          },
+        
+            
+        voteMv(index){
+            let n = (Math.ceil(this.films[index].vote_average / 2));
+            this.votes = n;
+            }
+},
 }
 </script>
 
@@ -179,7 +191,7 @@ section{
         background-color: rgba($color: #000000, $alpha: 0.8);
         max-width: 100%;
         opacity: 0;
-        transition: opacity 0.5s;
+        transition: opacity 0.2s;
         text-align: left;
 
         .content{
@@ -188,6 +200,10 @@ section{
           span{
             font-weight: bold;
           }
+
+          .fa-star{
+              color: gold;
+      }
         }
     }
     }
