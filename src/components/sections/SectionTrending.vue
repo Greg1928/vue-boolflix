@@ -1,35 +1,33 @@
 <template>
   <section>
     <h1>Serie TV in tendenza</h1>
-  <ol>
-    <li v-for="(trend, index) in trendingTv" :key="trend.i" @mouseover="mouseover(index)" @mouseleave="mouseleave(index)">
-      <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
-       <div class="over" :class="{block : trend.media_type === 'tvs'}"> 
-        <div class="content">
-          <p><span>Titolo: </span> {{trend.name}}</p>
-          <p><span>Titolo Originale: </span>{{trend.original_name}}</p>
-          <p>Voto: <span v-for="n in votesTv[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
-          <p><span>Overview: </span>{{trend.overview}}</p>
+    <ol>
+      <li v-for="(trend, index) in trendingTv" :key="trend.i" @mouseover="mouseover(index)" @mouseleave="mouseleave(index)">
+        <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
+        <div class="over" :class="{block : trend.media_type === 'tvs'}"> 
+          <div class="content">
+            <p><span>Titolo: </span> {{trend.name}}</p>
+            <p><span>Titolo Originale: </span>{{trend.original_name}}</p>
+            <p>Voto: <span v-for="n in votesTv[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
+            <p><span>Overview: </span>{{trend.overview}}</p>
+          </div>
         </div>
-      </div>
-    </li>
-  </ol>
-  <h1>Film in tendenza</h1>
-  <ol>
-    <li v-for="(trend, index) in trendingMv" :key="trend.i"  @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
-      <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
-      <div class="over" :class="{block : trend.video === 'movies'}"> 
-        <div class="content">
-          <p><span>Titolo: </span>{{trend.title}}</p>
-          <p><span>Titolo Originale: </span>{{trend.original_title}}</p>
-          <p>Voto: <span v-for="n in votesMv[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
-          <p><span>Overview: </span>{{trend.overview}}</p>
+      </li>
+    </ol>
+    <h1>Film in tendenza</h1>
+    <ol>
+      <li v-for="(trend, index) in trendingMv" :key="trend.i"  @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
+        <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
+        <div class="over" :class="{block : trend.video === 'movies'}"> 
+          <div class="content">
+            <p><span>Titolo: </span>{{trend.title}}</p>
+            <p><span>Titolo Originale: </span>{{trend.original_title}}</p>
+            <p>Voto: <span v-for="n in votesMv[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
+            <p><span>Overview: </span>{{trend.overview}}</p>
+          </div>
         </div>
-
-      </div>
-    </li>
-  </ol>
-    
+      </li>
+    </ol>
   </section>
 </template>
 

@@ -7,6 +7,8 @@
       <a href="#">Film</a>
     </div>
     <div class="right-part">
+      <input type="text" placeholder="  Cerca film o serie Tv" @keyup.enter="filterTv(), filterFilms()" v-model="dataShared.InputText">
+      <button @click="filterTv(), filterFilms()"><i class="fa-solid fa-magnifying-glass"></i></button>
       <p>UserName</p>
       <i class="fa-solid fa-gift"></i>
       <i class="fa-solid fa-bell"></i>
@@ -17,11 +19,49 @@
 </template>
 
 <script>
-
+import axios from 'axios'
+import dataShared from '../../shared/dataShared'
 
 export default {
     name: "BaseHeader",
-  
+    data(){
+        return{
+            dataShared,
+        }
+
+    },
+     methods:{
+      filterFilms(){
+        axios.get('https://api.themoviedb.org/3/search/movie', {
+            params:{
+                api_key: '8c5b607d815956781cffe0cfa80918d4',
+                query: dataShared.InputText,
+            }
+        }).then((response) =>{
+            dataShared.films = response.data.results;
+            for (let i = 0; i < response.data.results.length; i++){
+              dataShared.votesFilm.push(Math.ceil(response.data.results[i].vote_average / 2));
+             }
+        }).catch((err) => {
+            console.log(err);
+        })
+      },
+      filterTv(){
+        axios.get('https://api.themoviedb.org/3/search/tv', {
+            params:{
+                api_key: '8c5b607d815956781cffe0cfa80918d4',
+                query: dataShared.InputText,
+            }
+        }).then((response) =>{
+            dataShared.Tv = response.data.results
+            for (let i = 0; i < response.data.results.length; i++){
+              dataShared.votesSerie.push(Math.ceil(response.data.results[i].vote_average / 2));
+             }
+        }).catch((err) => {
+            console.log(err);
+        })
+      },
+     }
 }
 </script>
 
@@ -57,6 +97,14 @@ header{
     }
     p{
       margin: 0;
+    }
+    input{
+      border-radius: 20px;
+      cursor: auto;
+    }
+    button{
+      margin-left: 5px;
+      border-radius: 20px;
     }
   }
 

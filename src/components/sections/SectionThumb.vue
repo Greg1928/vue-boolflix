@@ -1,32 +1,31 @@
 <template>
   <section>
-    <input type="text" placeholder="  Cerca film o serie Tv" @keyup.enter="filterTv(), filterFilms()" v-model="dataShared.InputText">
-    <button @click="filterTv(), filterFilms()"><i class="fa-solid fa-magnifying-glass"></i></button>
-    <div :class="{none : dataShared.InputText === ''}" >
-      <h1>I tuoi risultati nella categoria Film</h1>
+    <div :class="{none : dataShared.InputText === ''}">
 
+      <h1>I tuoi risultati nella categoria Film</h1>
       <div class="list">
-        <div class="thumb" v-for="(film, index) in films" :key="film.id" @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
+        <div class="thumb" v-for="(film, index) in dataShared.films" :key="film.id" @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
           <FilmCardThumb :film="film"/>
           <div class="over" :class="{show : film.video === 'true'}"> 
             <div class="content">
               <p><span>Titolo: </span> {{film.title}}</p>
               <p><span>Titolo Originale: </span>{{film.original_title}}</p>
-              <p>Voto: <span v-for="n in votesFilm[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
+              <p>Voto: <span v-for="n in dataShared.votesFilm[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
               <p><span>Overview: </span>{{film.overview}}</p>
             </div>
           </div>
         </div>
       </div>
-        <h1>I tuoi risultati nella categoria Serie Tv</h1>
+
+      <h1>I tuoi risultati nella categoria Serie Tv</h1>
       <div class="list">
-        <div class="thumb" v-for="(serie,index) in Tv" :key="serie.id" @mouseover="mouseoverTv(index)" @mouseleave="mouseleaveTv(index)">
+        <div class="thumb" v-for="(serie,index) in dataShared.Tv" :key="serie.id" @mouseover="mouseoverTv(index)" @mouseleave="mouseleaveTv(index)">
           <TvCardThumb :Tv="serie"/>
           <div class="over" :class="{show : serie.vote_count === 'true'}"> 
               <div class="content">
                 <p><span>Titolo: </span> {{serie.name}}</p>
                 <p><span>Titolo Originale: </span>{{serie.original_name}}</p>
-                <p>Voto: <span v-for="n in votesSerie[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
+                <p>Voto: <span v-for="n in dataShared.votesSerie[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
                 <p><span>Overview: </span>{{serie.overview}}</p>
               </div>
           </div>
@@ -37,7 +36,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import imageIt from '../../assets/img/220px-Flag_of_Italy_(Pantone,_2003–2006).svg.png'
 import imageGb from '../../assets/img/Eng.png'
 import imageEs from '../../assets/img/Flag_of_Spain.svg.png'
@@ -50,97 +48,60 @@ import dataShared from '../../shared/dataShared'
 export default {
     name: 'SectionThumb',
     components: {FilmCardThumb, TvCardThumb},
+    props: {
+        films: Object,
+        Tv: Object,
+        votesSerie: Object,
+        votesFilm: Object
+    },
     data(){
         return{
-            films: [],
-            Tv: [],
             dataShared,
-            votesSerie: [],
-            votesFilm: []
         }
-
-    },
-    methods:{
-      filterFilms(){
-        axios.get('https://api.themoviedb.org/3/search/movie', {
-            params:{
-                api_key: '8c5b607d815956781cffe0cfa80918d4',
-                query: this.dataShared.InputText,
-            }
-        }).then((response) =>{
-            this.films = response.data.results;
-            for (let i = 0; i < response.data.results.length; i++){
-              this.votesFilm.push(Math.ceil(response.data.results[i].vote_average / 2));
-             }
-        }).catch((err) => {
-            console.log(err);
-        })
-      },
-      filterTv(){
-        axios.get('https://api.themoviedb.org/3/search/tv', {
-            params:{
-                api_key: '8c5b607d815956781cffe0cfa80918d4',
-                query: this.dataShared.InputText,
-            }
-        }).then((response) =>{
-            this.Tv = response.data.results
-            for (let i = 0; i < response.data.results.length; i++){
-              this.votesSerie.push(Math.ceil(response.data.results[i].vote_average / 2));
-             }
-        }).catch((err) => {
-            console.log(err);
-        })
-      },
-    dynamicFlagsFilm(i){
-      if(this.films[i].original_language === 'it' ){
-        return imageIt
-      }else if(this.films[i].original_language === 'en'){
-        return imageGb
-      }else if(this.films[i].original_language === 'es'){
-        return imageEs
-    }else if(this.films[i].original_language === 'fr'){
-        return imageFr
-    }else{
-      return imageRest
-    }
-    },
-    dynamicFlagsTv(i){
-      if(this.Tv[i].original_language === 'it' ){
-        return imageIt
-      }else if(this.Tv[i].original_language === 'en'){
-        return imageGb
-      }else if(this.Tv[i].original_language === 'es'){
-        return imageEs
-    }else if(this.Tv[i].original_language === 'fr'){
-        return imageFr
-    }else{
-      return imageRest
-    }
-    },
-    mouseoverTv: function(index){
-      this.Tv[index].vote_count = 'true';
-    }, 
-    mouseleaveTv: function(index){
-      this.Tv[index].vote_count = 'false';
-
-    },
-    mouseoverMv: function(index){
-      this.films[index].video = 'true';
-    }, 
-    mouseleaveMv: function(index){
-      this.films[index].video = 'false';
-
-    }, 
-     voteTv(index){
-          let n = (Math.ceil(this.Tv[index].vote_average / 2));
-            this.votes = n;
-          },
         
-            
-        voteMv(index){
-            let n = (Math.ceil(this.films[index].vote_average / 2));
-            this.votes = n;
-            }
+        },
+    methods:{
+  
+      dynamicFlagsFilm(i){
+        if(this.films[i].original_language === 'it' ){
+          return imageIt
+        }else if(this.films[i].original_language === 'en'){
+          return imageGb
+        }else if(this.films[i].original_language === 'es'){
+          return imageEs
+      }else if(this.films[i].original_language === 'fr'){
+          return imageFr
+      }else{
+        return imageRest
+      }
+      },
+      dynamicFlagsTv(i){
+        if(this.Tv[i].original_language === 'it' ){
+          return imageIt
+        }else if(this.Tv[i].original_language === 'en'){
+          return imageGb
+        }else if(this.Tv[i].original_language === 'es'){
+          return imageEs
+      }else if(this.Tv[i].original_language === 'fr'){
+          return imageFr
+      }else{
+        return imageRest
+      }
+      },
+      mouseoverTv: function(index){
+        dataShared.Tv[index].vote_count = 'true';
+      }, 
+      mouseleaveTv: function(index){
+        dataShared.Tv[index].vote_count = 'false';
+
+      },
+      mouseoverMv: function(index){
+        dataShared.films[index].video = 'true';
+      }, 
+      mouseleaveMv: function(index){
+        dataShared.films[index].video = 'false';
+
+      }, 
 },
 }
 </script>
@@ -153,20 +114,6 @@ section{
     text-align: center;
     margin-top: 20px;
   }
-  input{
-    width: 300px;
-    border-radius: 20px;
-  }
-  button{
-      width: 70px;
-      background-color: black;
-      margin-right: 20px;
-      border: solid 1px gray;
-      border-radius: 20px;
-      path{
-        color: white;
-      }
-    }
 
   .list{
   overflow-x: auto;
