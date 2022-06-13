@@ -88,9 +88,10 @@ section{
   display: none;
 
   h1{
-    text-align: center;
-    font-size: 40px;
+    font-size: 30px;
     text-transform: uppercase;
+    margin: 20px 20px;
+    color: white;
   }
 
   ol{
@@ -101,7 +102,7 @@ section{
     margin: 0;
   }
   li{
-    margin: 2rem 1.8rem;
+    margin: 2rem .5rem;
     cursor: pointer;
     position: relative;
   }
@@ -117,8 +118,9 @@ section{
     max-width: 100%;
     opacity: 0;
     transition: opacity 0.5s;
-    text-align: left;
+    text-align: center;
     overflow-y: auto;
+
 
     .content{
       padding: 40px 0 0 10px;

@@ -1,8 +1,9 @@
 <template>
-  <section>
+  <section class="section-thumb">
     <div :class="{none : dataShared.InputText === ''}">
 
       <h1>I tuoi risultati nella categoria Film</h1>
+      <p v-if="dataShared.films.length === 0">Nessun film trovato :(</p>
       <div class="list">
         <div class="thumb" v-for="(film, index) in dataShared.films" :key="film.id" @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
           <FilmCardThumb :film="film"/>
@@ -18,6 +19,7 @@
       </div>
 
       <h1>I tuoi risultati nella categoria Serie Tv</h1>
+      <p v-if="dataShared.Tv.length === 0">Nessuna serie tv trovata :(</p>
       <div class="list">
         <div class="thumb" v-for="(serie,index) in dataShared.Tv" :key="serie.id" @mouseover="mouseoverTv(index)" @mouseleave="mouseleaveTv(index)">
           <TvCardThumb :Tv="serie"/>
@@ -107,12 +109,15 @@ export default {
 </script>
 
 <styles scoped lang="scss">
-section{
-   text-align: right;
+.section-thumb{
   h1{
     color: white;
-    text-align: center;
-    margin-top: 20px;
+    margin: 20px 20px;
+    font-size: 30px;
+    text-transform: uppercase;
+  }
+  p{
+    color: white;
   }
 
   .list{
@@ -124,7 +129,7 @@ section{
     .thumb{
         cursor: pointer;
         position: relative;
-        margin: 2rem 1.8rem;
+        margin: 2rem .5rem;
 
         .show{
           opacity: 1;
@@ -143,7 +148,7 @@ section{
         max-width: 100%;
         opacity: 0;
         transition: opacity 0.5s;
-        text-align: left;
+        text-align: center;
         overflow-y: auto;
 
         .content{
