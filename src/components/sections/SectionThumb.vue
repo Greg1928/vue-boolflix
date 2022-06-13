@@ -6,13 +6,13 @@
       <h1>I tuoi risultati nella categoria Film</h1>
 
       <div class="list">
-        <div class="thumb" v-for="(film, index) in films" :key="film.id" @mouseover="mouseoverMv(index), voteMv(index)" @mouseleave="mouseleaveMv(index)">
+        <div class="thumb" v-for="(film, index) in films" :key="film.id" @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
           <FilmCardThumb :film="film"/>
           <div class="over" :class="{show : film.video === 'true'}"> 
             <div class="content">
               <p><span>Titolo: </span> {{film.title}}</p>
               <p><span>Titolo Originale: </span>{{film.original_title}}</p>
-              <p>Voto: <span v-for="n in votes" :key="n"><i class="fa-solid fa-star"></i></span></p>
+              <p>Voto: <span v-for="n in votesFilm[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
               <p><span>Overview: </span>{{film.overview}}</p>
             </div>
           </div>
@@ -20,13 +20,13 @@
       </div>
         <h1>I tuoi risultati nella categoria Serie Tv</h1>
       <div class="list">
-        <div class="thumb" v-for="(serie,index) in Tv" :key="serie.id" @mouseover="mouseoverTv(index), voteTv(index)" @mouseleave="mouseleaveTv(index)">
+        <div class="thumb" v-for="(serie,index) in Tv" :key="serie.id" @mouseover="mouseoverTv(index)" @mouseleave="mouseleaveTv(index)">
           <TvCardThumb :Tv="serie"/>
           <div class="over" :class="{show : serie.vote_count === 'true'}"> 
               <div class="content">
                 <p><span>Titolo: </span> {{serie.name}}</p>
                 <p><span>Titolo Originale: </span>{{serie.original_name}}</p>
-                <p>Voto: <span v-for="n in votes" :key="n"><i class="fa-solid fa-star"></i></span></p>
+                <p>Voto: <span v-for="n in votesSerie[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
                 <p><span>Overview: </span>{{serie.overview}}</p>
               </div>
           </div>
@@ -55,7 +55,8 @@ export default {
             films: [],
             Tv: [],
             dataShared,
-            votes: 0
+            votesSerie: [],
+            votesFilm: []
         }
 
     },
@@ -65,11 +66,12 @@ export default {
             params:{
                 api_key: '8c5b607d815956781cffe0cfa80918d4',
                 query: this.dataShared.InputText,
-                // language: 'it-IT'
             }
         }).then((response) =>{
-            this.films = response.data.results
-            console.log(this.films);
+            this.films = response.data.results;
+            for (let i = 0; i < response.data.results.length; i++){
+              this.votesFilm.push(Math.ceil(response.data.results[i].vote_average / 2));
+             }
         }).catch((err) => {
             console.log(err);
         })
@@ -79,11 +81,12 @@ export default {
             params:{
                 api_key: '8c5b607d815956781cffe0cfa80918d4',
                 query: this.dataShared.InputText,
-                // language: 'it-IT'
             }
         }).then((response) =>{
             this.Tv = response.data.results
-            console.log(this.Tv);  
+            for (let i = 0; i < response.data.results.length; i++){
+              this.votesSerie.push(Math.ceil(response.data.results[i].vote_average / 2));
+             }
         }).catch((err) => {
             console.log(err);
         })
@@ -152,14 +155,14 @@ section{
   }
   input{
     width: 300px;
-    border: solid 3px black;
+    border-radius: 20px;
   }
   button{
       width: 70px;
       background-color: black;
       margin-right: 20px;
-      border: solid 1px red;
-      border-radius: 3px;
+      border: solid 1px gray;
+      border-radius: 20px;
       path{
         color: white;
       }
@@ -174,7 +177,7 @@ section{
     .thumb{
         cursor: pointer;
         position: relative;
-        margin: 2rem;
+        margin: 2rem 1.8rem;
 
         .show{
           opacity: 1;
@@ -186,13 +189,15 @@ section{
         top: 0;
         left: 0;
         bottom: 0;
+        right: 0;
         z-index: 1;
         color: white;
         background-color: rgba($color: #000000, $alpha: 0.8);
         max-width: 100%;
         opacity: 0;
-        transition: opacity 0.2s;
+        transition: opacity 0.5s;
         text-align: left;
+        overflow-y: auto;
 
         .content{
           margin: 40px 0 0 10px;

@@ -1,8 +1,13 @@
 <template>
   <header>
-    <h1>boolflix</h1>
+    <div class="left-part">
+      <h1>boolflix</h1>
+      <a href="#">Home</a>
+      <a href="#">Serie TV</a>
+      <a href="#">Film</a>
+    </div>
     <div class="right-part">
-      <p>userName</p>
+      <p>UserName</p>
       <i class="fa-solid fa-gift"></i>
       <i class="fa-solid fa-bell"></i>
       <i class="fa-solid fa-circle-user"></i>
@@ -26,6 +31,18 @@ header{
   height: 80px;
   display: flex;
   justify-content: space-between;
+
+  .left-part{
+    display: flex;
+
+    a{
+      align-self: center;
+      margin: 0 15px;
+      font-size: 22px;
+      text-decoration: none;
+      color: white;
+    }
+  }
 
   .right-part{
     color: white;

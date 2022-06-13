@@ -2,13 +2,13 @@
   <section>
     <h1>Serie TV in tendenza</h1>
   <ol>
-    <li v-for="(trend, index) in trendingTv" :key="trend.i" @mouseover="mouseover(index), voteTv(index)" @mouseleave="mouseleave(index)">
+    <li v-for="(trend, index) in trendingTv" :key="trend.i" @mouseover="mouseover(index)" @mouseleave="mouseleave(index)">
       <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
        <div class="over" :class="{block : trend.media_type === 'tvs'}"> 
         <div class="content">
           <p><span>Titolo: </span> {{trend.name}}</p>
           <p><span>Titolo Originale: </span>{{trend.original_name}}</p>
-          <p>Voto: <span v-for="n in votes" :key="n"><i class="fa-solid fa-star"></i></span></p>
+          <p>Voto: <span v-for="n in votesTv[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
           <p><span>Overview: </span>{{trend.overview}}</p>
         </div>
       </div>
@@ -16,13 +16,13 @@
   </ol>
   <h1>Film in tendenza</h1>
   <ol>
-    <li v-for="(trend, index) in trendingMv" :key="trend.i"  @mouseover="mouseoverMv(index), voteTv(index)" @mouseleave="mouseleaveMv(index)">
+    <li v-for="(trend, index) in trendingMv" :key="trend.i"  @mouseover="mouseoverMv(index)" @mouseleave="mouseleaveMv(index)">
       <img :src="`https://image.tmdb.org/t/p/w342${trend.poster_path}`" alt="">
       <div class="over" :class="{block : trend.video === 'movies'}"> 
         <div class="content">
           <p><span>Titolo: </span>{{trend.title}}</p>
           <p><span>Titolo Originale: </span>{{trend.original_title}}</p>
-          <p>Voto: <span v-for="n in votes" :key="n"><i class="fa-solid fa-star"></i></span></p>
+          <p>Voto: <span v-for="n in votesMv[index]" :key="n"><i class="fa-solid fa-star"></i></span></p>
           <p><span>Overview: </span>{{trend.overview}}</p>
         </div>
 
@@ -42,8 +42,8 @@ export default {
         return{
             trendingTv: [],
             trendingMv: [],
-            check: false,
-            votes: 0, 
+            votesTv: [],
+            votesMv: []
         }
       },
       created(){
@@ -55,9 +55,10 @@ export default {
           for (let i = 0; i < response.data.results.length; i++) {
             if(response.data.results[i].media_type === 'tv'){
             this.trendingTv.push(response.data.results[i]);
-          
+            this.votesTv.push(Math.ceil(response.data.results[i].vote_average / 2));
           }else if(response.data.results[i].media_type === 'movie'){
             this.trendingMv.push(response.data.results[i]);
+            this.votesMv.push(Math.ceil(response.data.results[i].vote_average / 2));
           }
           }
         }).catch((err) => {
@@ -79,17 +80,6 @@ export default {
       this.trendingMv[index].video = 'movie';
 
     },
-
-        voteTv(index){
-          let n = (Math.ceil(this.trendingTv[index].vote_average / 2));
-            this.votes = n;
-          },
-        
-            
-        voteMv(index){
-            let n = (Math.ceil(this.trendingMv[index].vote_average / 2));
-            this.votes = n;
-            }
     
 }
 }
@@ -110,9 +100,10 @@ section{
     list-style: none;
     overflow-x: auto;
     background-color: black;
+    margin: 0;
   }
   li{
-    margin: 2rem;
+    margin: 2rem 1.8rem;
     cursor: pointer;
     position: relative;
   }
@@ -121,13 +112,15 @@ section{
     top: 0;
     left: 0;
     bottom: 0;
+    right: 0;
     z-index: 1;
     color: white;
     background-color: rgba($color: #000000, $alpha: 0.8);
     max-width: 100%;
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.5s;
     text-align: left;
+    overflow-y: auto;
 
     .content{
       padding: 40px 0 0 10px;
